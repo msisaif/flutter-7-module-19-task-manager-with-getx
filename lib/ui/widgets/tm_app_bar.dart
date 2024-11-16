@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:task_manager_with_getx/ui/controllers/auth_controller.dart';
 import 'package:task_manager_with_getx/ui/screens/profile_screen.dart';
@@ -14,6 +16,13 @@ class TMAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userPhoto = AuthController.userData!.photo!.isNotEmpty
+        ? Image.memory(
+            base64Decode(AuthController.userData!.photo!),
+            fit: BoxFit.cover,
+          )
+        : const Icon(Icons.person, color: Colors.grey);
+
     return GestureDetector(
       onTap: () {
         if (isProfileScreenOpen) {
@@ -30,9 +39,16 @@ class TMAppBar extends StatelessWidget implements PreferredSizeWidget {
         backgroundColor: AppColors.themeColor,
         title: Row(
           children: [
-            const CircleAvatar(
+            CircleAvatar(
               radius: 16,
               backgroundColor: Colors.white,
+              child: ClipOval(
+                child: SizedBox(
+                  width: 32,
+                  height: 32,
+                  child: userPhoto,
+                ),
+              ),
             ),
             const SizedBox(width: 16),
             Expanded(
